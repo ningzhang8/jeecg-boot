@@ -83,4 +83,9 @@ public class SalOdrmServiceImpl extends ServiceImpl<SalOdrmMapper, SalOdrm> impl
     public List<Map<String, Object>> getExpressList() {
         return salOdrmMapper.getExpressList();
     }
+
+    @Override
+    public List<Map<String, Object>> getRegionList() {
+        return salOdrmMapper.getRegionList();
+    }
 }

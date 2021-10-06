@@ -44,4 +44,9 @@ public interface ISalOdrmService extends IService<SalOdrm> {
      * 获取快递数据
      */
     public List<Map<String, Object>> getExpressList();
+
+    /**
+     * 获取地区数据
+     */
+    public List<Map<String, Object>> getRegionList();
 }

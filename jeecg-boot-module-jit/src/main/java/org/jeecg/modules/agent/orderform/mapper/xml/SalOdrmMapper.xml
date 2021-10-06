@@ -4,4 +4,7 @@
     <select id="getExpressList" resultType="map">
         select vre.FPKID as value, vre.FExpressDesc as name, vre.FExpressCode as code from Vie_RS_Express vre
     </select>
+    <select id="getRegionList" resultType="map">
+        select distinct vrc.Farea as title from vie_rs_cities vrc
+    </select>
 </mapper>

@@ -15,4 +15,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface SalOdrmMapper extends BaseMapper<SalOdrm> {
     public List<Map<String, Object>> getExpressList();
+
+    public List<Map<String, Object>> getRegionList();
 }

@@ -268,6 +268,17 @@ public class SalOdrmController {
     }
 
     /**
+     * @description 订单表——获取地区数据
+     * @author Ning
+     * @date 2021/10/6
+     * @return org.jeecg.common.api.vo.Result<?>
+     */
+    @GetMapping(value = "/getRegionList")
+    public Result<?> getRegionList() {
+        return Result.OK(salOdrmService.getRegionList());
+    }
+
+    /**
      * @description 订单表明细——获取围边数据
      * @author Ning
      * @date 2021/9/30
