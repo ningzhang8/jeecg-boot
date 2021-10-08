@@ -85,7 +85,13 @@ public class SalOdrmServiceImpl extends ServiceImpl<SalOdrmMapper, SalOdrm> impl
     }
 
     @Override
-    public List<Map<String, Object>> getRegionList() {
-        return salOdrmMapper.getRegionList();
+    public List<Map<String, Object>> getAddressTreeDataList(String keyLen, String value) {
+        return salOdrmMapper.getAddressTreeDataList(keyLen, value);
     }
+
+    @Override
+    public List<Map<String, Object>> queryAddressListBySelectValue(String selectValue, String inputValue) {
+        return salOdrmMapper.queryAddressListBySelectValue(selectValue, inputValue);
+    }
+
 }

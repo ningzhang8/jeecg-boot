@@ -4,7 +4,37 @@
     <select id="getExpressList" resultType="map">
         select vre.FPKID as value, vre.FExpressDesc as name, vre.FExpressCode as code from Vie_RS_Express vre
     </select>
-    <select id="getRegionList" resultType="map">
-        select distinct vrc.Farea as title from vie_rs_cities vrc
+    <select id="getAddressTreeDataList" resultType="map">
+        <choose>
+            <when test='keyLen == "3"'>
+                select distinct vrc.fprovince as title, value = 'fprovince' from vie_rs_cities vrc where vrc.farea =
+                #{value}
+            </when>
+            <when test='keyLen == "5"'>
+                select distinct vrc.fregion as title, value = 'fregion' from vie_rs_cities vrc where vrc.fprovince
+                = #{value}
+            </when>
+            <when test='keyLen == "7"'>
+                select vrc.fcity as title, value = 'fcity' from vie_rs_cities vrc where vrc.fregion = #{value}
+            </when>
+            <otherwise>
+                select distinct vrc.farea as title, value = 'farea' from vie_rs_cities vrc
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="queryAddressListBySelectValue" resultType="map">
+        select vrc.* from vie_rs_cities vrc where vrc.${selectValue} like CONCAT(CONCAT('%', #{inputValue}), '%')
+<!--        <choose>-->
+<!--            <when test='selectValue == "fprovince"'>-->
+<!--                select vrc.* from vie_rs_cities vrc where vrc.fprovince like CONCAT(CONCAT('%', #{inputValue}), '%')-->
+<!--            </when>-->
+<!--            <when test='selectValue == "fregion"'>-->
+<!--                select vrc.* from vie_rs_cities vrc where vrc.fregion like CONCAT(CONCAT('%', #{inputValue}), '%')-->
+<!--            </when>-->
+<!--            <when test='selectValue == "fcity"'>-->
+<!--                select vrc.* from vie_rs_cities vrc where vrc.fcity like CONCAT(CONCAT('%', #{inputValue}), '%')-->
+<!--            </when>-->
+<!--        </choose>-->
     </select>
 </mapper>

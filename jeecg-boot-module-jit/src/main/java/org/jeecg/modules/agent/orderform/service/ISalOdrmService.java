@@ -48,5 +48,10 @@ public interface ISalOdrmService extends IService<SalOdrm> {
     /**
      * 获取地区数据
      */
-    public List<Map<String, Object>> getRegionList();
+    public List<Map<String, Object>> getAddressTreeDataList(String keyLen, String value);
+
+    /**
+     * 查询过滤值
+     */
+    public List<Map<String, Object>> queryAddressListBySelectValue(String selectValue, String inputValue);
 }

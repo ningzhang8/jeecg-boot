@@ -273,9 +273,24 @@ public class SalOdrmController {
      * @date 2021/10/6
      * @return org.jeecg.common.api.vo.Result<?>
      */
-    @GetMapping(value = "/getRegionList")
-    public Result<?> getRegionList() {
-        return Result.OK(salOdrmService.getRegionList());
+    @GetMapping(value = "/getAddressTreeDataList")
+    public Result<?> getAddressTreeDataList(HttpServletRequest request) {
+        return Result
+            .OK(salOdrmService.getAddressTreeDataList(request.getParameter("keyLen"), request.getParameter("value")));
+    }
+
+    /**
+     * @description 订单表——查询过滤值
+     * @author Ning
+     * @date 2021/10/8
+     * @param request
+     * @return org.jeecg.common.api.vo.Result<?>
+     */
+    @GetMapping(value = "/queryAddressListBySelectValue")
+    public Result<?> queryAddressListBySelectValue(HttpServletRequest request) {
+        System.out.println(request.getParameter("selectValue"));
+        return Result.OK(salOdrmService.queryAddressListBySelectValue(request.getParameter("selectValue"),
+            request.getParameter("inputValue")));
     }
 
     /**

@@ -16,5 +16,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface SalOdrmMapper extends BaseMapper<SalOdrm> {
     public List<Map<String, Object>> getExpressList();
 
-    public List<Map<String, Object>> getRegionList();
+    public List<Map<String, Object>> getAddressTreeDataList(String keyLen, String value);
+
+    public List<Map<String, Object>> queryAddressListBySelectValue(String selectValue, String inputValue);
 }
