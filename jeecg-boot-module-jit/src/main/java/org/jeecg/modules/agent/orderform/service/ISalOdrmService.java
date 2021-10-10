@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.jeecg.modules.agent.orderform.entity.SalOdrd;
 import org.jeecg.modules.agent.orderform.entity.SalOdrm;
 
@@ -54,4 +55,11 @@ public interface ISalOdrmService extends IService<SalOdrm> {
      * 查询过滤值
      */
     public List<Map<String, Object>> queryAddressListBySelectValue(String selectValue, String inputValue);
+
+    /**
+     * 根据当前登录用户获取代理商简称、业务员、币种
+     */
+    public Map<String, Object> getAgentUserByLoginUser(String userId);
+
+    public Page<Map<String, Object>> getOrderMainListByLoginUser(Page page, String userId);
 }

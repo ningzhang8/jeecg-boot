@@ -25,16 +25,9 @@
 
     <select id="queryAddressListBySelectValue" resultType="map">
         select vrc.* from vie_rs_cities vrc where vrc.${selectValue} like CONCAT(CONCAT('%', #{inputValue}), '%')
-<!--        <choose>-->
-<!--            <when test='selectValue == "fprovince"'>-->
-<!--                select vrc.* from vie_rs_cities vrc where vrc.fprovince like CONCAT(CONCAT('%', #{inputValue}), '%')-->
-<!--            </when>-->
-<!--            <when test='selectValue == "fregion"'>-->
-<!--                select vrc.* from vie_rs_cities vrc where vrc.fregion like CONCAT(CONCAT('%', #{inputValue}), '%')-->
-<!--            </when>-->
-<!--            <when test='selectValue == "fcity"'>-->
-<!--                select vrc.* from vie_rs_cities vrc where vrc.fcity like CONCAT(CONCAT('%', #{inputValue}), '%')-->
-<!--            </when>-->
-<!--        </choose>-->
+    </select>
+
+    <select id="getAgentUserByLoginUser" resultType="map">
+        select FKAgentID, FAgentName, FSalesman, FCurrency from Vie_RS_AgentUser where FPKID = #{userId}
     </select>
 </mapper>

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.jeecg.modules.agent.orderform.entity.SalOdrd;
 import org.jeecg.modules.agent.orderform.entity.SalOdrm;
 import org.jeecg.modules.agent.orderform.mapper.SalOdrdMapper;
@@ -33,11 +34,11 @@ public class SalOdrmServiceImpl extends ServiceImpl<SalOdrmMapper, SalOdrm> impl
     @Override
     @Transactional
     public void saveMain(SalOdrm salOdrm, List<SalOdrd> salOdrdList) {
-        salOdrm.setTxType("1");
+        salOdrm.setFrecstat("0");
+        salOdrm.setTxType("0");
         salOdrmMapper.insert(salOdrm);
         if (salOdrdList != null && salOdrdList.size() > 0) {
             for (SalOdrd entity : salOdrdList) {
-                System.out.println("here is run!");
                 // 外键设置
                 entity.setFkid(salOdrm.getId());
                 salOdrdMapper.insert(entity);
@@ -79,6 +80,10 @@ public class SalOdrmServiceImpl extends ServiceImpl<SalOdrmMapper, SalOdrm> impl
         }
     }
 
+    public Page<Map<String, Object>> getOrderMainListByLoginUser(String userId){
+        return salOdrmMapper.getOrderMainListByLoginUser(userId);
+    };
+
     @Override
     public List<Map<String, Object>> getExpressList() {
         return salOdrmMapper.getExpressList();
@@ -92,6 +97,11 @@ public class SalOdrmServiceImpl extends ServiceImpl<SalOdrmMapper, SalOdrm> impl
     @Override
     public List<Map<String, Object>> queryAddressListBySelectValue(String selectValue, String inputValue) {
         return salOdrmMapper.queryAddressListBySelectValue(selectValue, inputValue);
+    }
+
+    @Override
+    public Map<String, Object> getAgentUserByLoginUser(String userId) {
+        return salOdrmMapper.getAgentUserByLoginUser(userId);
     }
 
 }

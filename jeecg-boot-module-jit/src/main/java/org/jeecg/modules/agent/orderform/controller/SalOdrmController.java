@@ -1,15 +1,11 @@
 package org.jeecg.modules.agent.orderform.controller;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoLog;
@@ -33,13 +29,14 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Description: 订单表
@@ -73,7 +70,8 @@ public class SalOdrmController {
         @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize, HttpServletRequest req) {
         QueryWrapper<SalOdrm> queryWrapper = QueryGenerator.initQueryWrapper(salOdrm, req.getParameterMap());
         Page<SalOdrm> page = new Page<SalOdrm>(pageNo, pageSize);
-        IPage<SalOdrm> pageList = salOdrmService.page(page, queryWrapper);
+        LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
+        IPage<SalOdrm> pageList = salOdrmService.getOrderMainListByLoginUser(page, sysUser.getUsername());
         return Result.OK(pageList);
     }
 
@@ -288,7 +286,6 @@ public class SalOdrmController {
      */
     @GetMapping(value = "/queryAddressListBySelectValue")
     public Result<?> queryAddressListBySelectValue(HttpServletRequest request) {
-        System.out.println(request.getParameter("selectValue"));
         return Result.OK(salOdrmService.queryAddressListBySelectValue(request.getParameter("selectValue"),
             request.getParameter("inputValue")));
     }
@@ -302,5 +299,18 @@ public class SalOdrmController {
     @GetMapping(value = "/getBorderModeList")
     public Result<?> getBorderModeList() {
         return Result.OK(salOdrdService.getBorderModeList());
+    }
+
+
+    /**
+     * @description 根据当前登录用户获取代理商简称、业务员、币种
+     * @author Ning
+     * @date 2021/10/9
+     * @return org.jeecg.common.api.vo.Result<?>
+     */
+    @GetMapping(value = "/getAgentUserByLoginUser")
+    public Result<?> getAgentUserByLoginUser() {
+        LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
+        return Result.OK(salOdrmService.getAgentUserByLoginUser(sysUser.getUsername()));
     }
 }

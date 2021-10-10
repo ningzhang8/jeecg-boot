@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.agent.orderform.mapper.SalOdrmMapper">
+    <select id="getOrderMainListByLoginUser" resultType="map">
+        select so.*, vsa.FAgentName
+        from SAL_ODRM so
+                 left join Vie_RS_Agent vsa on so.FKAgentID = vsa.FPKID
+        where salesman = #{userId}
+    </select>
     <select id="getExpressList" resultType="map">
-        select vre.FPKID as value, vre.FExpressDesc as name, vre.FExpressCode as code from Vie_RS_Express vre
+        select vre.FPKID as value, vre.FExpressDesc as name, vre.FExpressCode as code
+        from Vie_RS_Express vre
     </select>
     <select id="getAddressTreeDataList" resultType="map">
         <choose>
@@ -24,17 +31,14 @@
     </select>
 
     <select id="queryAddressListBySelectValue" resultType="map">
-        select vrc.* from vie_rs_cities vrc where vrc.${selectValue} like CONCAT(CONCAT('%', #{inputValue}), '%')
-        <!--        <choose>-->
-        <!--            <when test='selectValue == "fprovince"'>-->
-        <!--                select vrc.* from vie_rs_cities vrc where vrc.fprovince like CONCAT(CONCAT('%', #{inputValue}), '%')-->
-        <!--            </when>-->
-        <!--            <when test='selectValue == "fregion"'>-->
-        <!--                select vrc.* from vie_rs_cities vrc where vrc.fregion like CONCAT(CONCAT('%', #{inputValue}), '%')-->
-        <!--            </when>-->
-        <!--            <when test='selectValue == "fcity"'>-->
-        <!--                select vrc.* from vie_rs_cities vrc where vrc.fcity like CONCAT(CONCAT('%', #{inputValue}), '%')-->
-        <!--            </when>-->
-        <!--        </choose>-->
+        select vrc.*
+        from vie_rs_cities vrc
+        where vrc.${selectValue} like CONCAT(CONCAT('%', #{inputValue}), '%')
+    </select>
+
+    <select id="getAgentUserByLoginUser" resultType="map">
+        select FKAgentID, FAgentName, FSalesman, FCurrency
+        from Vie_RS_AgentUser
+        where FPKID = #{userId}
     </select>
 </mapper>
