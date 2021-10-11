@@ -11,6 +11,8 @@ import org.jeecg.modules.agent.orderform.entity.SalOdrm;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @Description: 订单表
  * @Author: jeecg-boot
@@ -61,5 +63,7 @@ public interface ISalOdrmService extends IService<SalOdrm> {
      */
     public Map<String, Object> getAgentUserByLoginUser(String userId);
 
-    public Page<Map<String, Object>> getOrderMainListByLoginUser(Page page, String userId);
+    public Page<SalOdrm> getOrderMainListByLoginUser(Page<SalOdrm> page, String userId, HttpServletRequest req);
+
+    public String getAgentByLoginUser(String userId);
 }

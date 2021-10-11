@@ -2,6 +2,7 @@ package org.jeecg.modules.agent.orderform.service.impl;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @Description: 订单表
@@ -80,9 +83,14 @@ public class SalOdrmServiceImpl extends ServiceImpl<SalOdrmMapper, SalOdrm> impl
         }
     }
 
-    public Page<Map<String, Object>> getOrderMainListByLoginUser(String userId){
-        return salOdrmMapper.getOrderMainListByLoginUser(userId);
-    };
+    public Page<SalOdrm> getOrderMainListByLoginUser(Page<SalOdrm> page, String userId, HttpServletRequest req){
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("orderDate_begin", req.getParameter("orderDate_begin"));
+        map.put("orderDate_end", req.getParameter("orderDate_end"));
+        map.put("sellDate_begin", req.getParameter("sellDate_begin"));
+        map.put("sellDate_end", req.getParameter("sellDate_end"));
+        return salOdrmMapper.getOrderMainListByLoginUser(page, userId);
+    }
 
     @Override
     public List<Map<String, Object>> getExpressList() {
@@ -103,5 +111,10 @@ public class SalOdrmServiceImpl extends ServiceImpl<SalOdrmMapper, SalOdrm> impl
     public Map<String, Object> getAgentUserByLoginUser(String userId) {
         return salOdrmMapper.getAgentUserByLoginUser(userId);
     }
+
+    @Override
+    public String getAgentByLoginUser(String userId) {
+        return salOdrmMapper.getAgentByLoginUser(userId);
+    };
 
 }

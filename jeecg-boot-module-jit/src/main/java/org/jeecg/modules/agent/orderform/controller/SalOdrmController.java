@@ -68,11 +68,11 @@ public class SalOdrmController {
     @GetMapping(value = "/list")
     public Result<?> queryPageList(SalOdrm salOdrm, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
         @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize, HttpServletRequest req) {
-        QueryWrapper<SalOdrm> queryWrapper = QueryGenerator.initQueryWrapper(salOdrm, req.getParameterMap());
         Page<SalOdrm> page = new Page<SalOdrm>(pageNo, pageSize);
         LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
-        IPage<SalOdrm> pageList = salOdrmService.getOrderMainListByLoginUser(page, sysUser.getUsername());
-        return Result.OK(pageList);
+        System.out.println(req);
+        page = salOdrmService.getOrderMainListByLoginUser(page, sysUser.getUsername(), req);
+        return Result.OK(page);
     }
 
     /**
@@ -301,7 +301,6 @@ public class SalOdrmController {
         return Result.OK(salOdrdService.getBorderModeList());
     }
 
-
     /**
      * @description 根据当前登录用户获取代理商简称、业务员、币种
      * @author Ning
@@ -312,5 +311,17 @@ public class SalOdrmController {
     public Result<?> getAgentUserByLoginUser() {
         LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
         return Result.OK(salOdrmService.getAgentUserByLoginUser(sysUser.getUsername()));
+    }
+
+    /**
+     * @description 页面初始化带出——代理商简称
+     * @author Ning
+     * @date 2021/10/11
+     * @return org.jeecg.common.api.vo.Result<?>
+     */
+    @GetMapping(value = "/getAgentByLoginUser")
+    public Result<?> getAgentByLoginUser() {
+        LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
+        return Result.OK(salOdrmService.getAgentByLoginUser(sysUser.getUsername()));
     }
 }
