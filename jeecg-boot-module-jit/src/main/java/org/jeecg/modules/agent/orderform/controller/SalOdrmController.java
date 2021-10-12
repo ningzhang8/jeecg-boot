@@ -70,7 +70,6 @@ public class SalOdrmController {
         @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize, HttpServletRequest req) {
         Page<SalOdrm> page = new Page<SalOdrm>(pageNo, pageSize);
         LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
-        System.out.println(req);
         page = salOdrmService.getOrderMainListByLoginUser(page, sysUser.getUsername(), req);
         return Result.OK(page);
     }

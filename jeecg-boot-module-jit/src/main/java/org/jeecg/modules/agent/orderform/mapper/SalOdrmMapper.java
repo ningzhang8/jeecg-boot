@@ -1,15 +1,12 @@
 package org.jeecg.modules.agent.orderform.mapper;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.jeecg.modules.agent.orderform.entity.SalOdrm;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-
-import javax.servlet.http.HttpServletRequest;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
  * @Description: 订单表
@@ -18,7 +15,9 @@ import javax.servlet.http.HttpServletRequest;
  * @Version: V1.0
  */
 public interface SalOdrmMapper extends BaseMapper<SalOdrm> {
-    public Page<SalOdrm> getOrderMainListByLoginUser(Page<SalOdrm> page, String userId);
+    public Page<SalOdrm> getOrderMainListByLoginUser(Page<SalOdrm> page, String userId, String orderDate_begin,
+        String orderDate_end, String sellDate_begin, String sellDate_end, String orderNumber,
+        String customerCodeNumber);
 
     public List<Map<String, Object>> getExpressList();
 

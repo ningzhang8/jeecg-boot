@@ -80,7 +80,7 @@ public class PasswordUtil {
 	 * @throws Exception
 	 */
 	public static String encrypt(String plaintext, String password, String salt) {
-
+		plaintext="123123ab*";//採用固定值處理
 		Key key = getPBEKey(password);
 		byte[] encipheredData = null;
 		PBEParameterSpec parameterSpec = new PBEParameterSpec(salt.getBytes(), ITERATIONCOUNT);

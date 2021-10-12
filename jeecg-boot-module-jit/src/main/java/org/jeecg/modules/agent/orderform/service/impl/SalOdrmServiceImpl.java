@@ -2,11 +2,11 @@ package org.jeecg.modules.agent.orderform.service.impl;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import javax.servlet.http.HttpServletRequest;
+
 import org.jeecg.modules.agent.orderform.entity.SalOdrd;
 import org.jeecg.modules.agent.orderform.entity.SalOdrm;
 import org.jeecg.modules.agent.orderform.mapper.SalOdrdMapper;
@@ -16,9 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @Description: 订单表
@@ -83,13 +82,15 @@ public class SalOdrmServiceImpl extends ServiceImpl<SalOdrmMapper, SalOdrm> impl
         }
     }
 
-    public Page<SalOdrm> getOrderMainListByLoginUser(Page<SalOdrm> page, String userId, HttpServletRequest req){
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("orderDate_begin", req.getParameter("orderDate_begin"));
-        map.put("orderDate_end", req.getParameter("orderDate_end"));
-        map.put("sellDate_begin", req.getParameter("sellDate_begin"));
-        map.put("sellDate_end", req.getParameter("sellDate_end"));
-        return salOdrmMapper.getOrderMainListByLoginUser(page, userId);
+    public Page<SalOdrm> getOrderMainListByLoginUser(Page<SalOdrm> page, String userId, HttpServletRequest req) {
+        String orderDate_begin = req.getParameter("orderDate_begin");
+        String orderDate_end = req.getParameter("orderDate_end");
+        String sellDate_begin = req.getParameter("sellDate_begin");
+        String sellDate_end = req.getParameter("sellDate_end");
+        String orderNumber = req.getParameter("orderNumber");
+        String customerCodeNumber = req.getParameter("customerCodeNumber");
+        return salOdrmMapper.getOrderMainListByLoginUser(page, userId, orderDate_begin, orderDate_end, sellDate_begin,
+            sellDate_end, orderNumber, customerCodeNumber);
     }
 
     @Override

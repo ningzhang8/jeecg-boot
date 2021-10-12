@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.jeecg.modules.agent.orderform.mapper.SalOdrmMapper">
-    <select id="getOrderMainListByLoginUser" resultType="map">
+    <select id="getOrderMainListByLoginUser" parameterType="map" resultType="map">
         select so.id,
         so.create_by as createBy,
         so.create_time as createTime,
@@ -22,19 +22,32 @@
         so.address,
         so.order_amt as orderAmt,
         so.req,
-        so.order_date as orderDate,
+        CONVERT(CHAR(10), so.order_date, 23) as orderDate,
         so.tx_type as txType,
-        so.sell_date as sellDate,
+        CONVERT(CHAR(10), so.sell_date, 23) as sellDate,
         so.Fcurrency as fcurrency,
         so.customer_order_number as customerOrderNumber,
         so.FKExpressID as fkexpressid,
         so.FRecStat as frecstat,
         so.file1,
         so.file2,
-        vra.FAgentName
+        vra.FAgentName,
+        vra.FUserName
         from sal_odrm so
         left join vie_rs_agentuser vra on so.FKAgentID = vra.FKAgentID
         where vra.FPKID=#{userId}
+        <if test="orderDate_begin != null and orderDate_begin != '' and orderDate_end != null  and orderDate_end != ''">
+            AND CONVERT(CHAR(10), so.order_date, 23) >= #{orderDate_begin} and #{orderDate_end} >= CONVERT(CHAR(10), so.order_date, 23)
+        </if>
+        <if test="sellDate_begin != null and sellDate_begin != '' and orderDate_end != null  and orderDate_end != ''">
+            AND CONVERT(CHAR(10), so.sell_date, 23) >= #{sellDate_begin} and #{sellDate_end} >= CONVERT(CHAR(10), so.sell_date, 23)
+        </if>
+        <if test="orderNumber != null and orderNumber != ''">
+            AND so.order_number like CONCAT(CONCAT('%', #{orderNumber}), '%')
+        </if>
+        <if test="customerCodeNumber != null and customerCodeNumber != ''">
+            AND so.customer_code_number like CONCAT(CONCAT('%', #{customerCodeNumber}), '%')
+        </if>
     </select>
     <select id="getExpressList" resultType="map">
         select vre.FPKID as value, vre.FExpressDesc as name, vre.FExpressCode as code
