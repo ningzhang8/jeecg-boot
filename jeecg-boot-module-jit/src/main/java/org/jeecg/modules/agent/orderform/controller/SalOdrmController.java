@@ -68,6 +68,7 @@ public class SalOdrmController {
     @GetMapping(value = "/list")
     public Result<?> queryPageList(SalOdrm salOdrm, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
         @RequestParam(name = "pageSize", defaultValue = "10") Integer pageSize, HttpServletRequest req) {
+        System.out.println(pageSize);
         Page<SalOdrm> page = new Page<SalOdrm>(pageNo, pageSize);
         LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
         page = salOdrmService.getOrderMainListByLoginUser(page, sysUser.getUsername(), req);
