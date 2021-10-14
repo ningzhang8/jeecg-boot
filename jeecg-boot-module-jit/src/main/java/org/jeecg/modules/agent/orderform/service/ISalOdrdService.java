@@ -21,4 +21,12 @@ public interface ISalOdrdService extends IService<SalOdrd> {
      * 获取围边数据
      */
     public List<Map<String, Object>> getBorderModeList();
+
+    /**
+     * 获取单价
+     * @param priceId
+     * @param orderDate
+     * @return
+     */
+    public String getPriceByPriceIdAndOrderDate(String priceId, String orderDate);
 }

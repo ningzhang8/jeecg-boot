@@ -32,4 +32,8 @@ public class SalOdrdServiceImpl extends ServiceImpl<SalOdrdMapper, SalOdrd> impl
     public List<Map<String, Object>> getBorderModeList() {
         return salOdrdMapper.getBorderModeList();
     }
+
+    public String getPriceByPriceIdAndOrderDate(String priceId, String orderDate) {
+        return salOdrdMapper.getPriceByPriceIdAndOrderDate(priceId, orderDate);
+    }
 }

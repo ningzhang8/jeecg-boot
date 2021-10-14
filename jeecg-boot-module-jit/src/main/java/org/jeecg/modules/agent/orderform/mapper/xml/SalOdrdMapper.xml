@@ -21,4 +21,15 @@
         SELECT vrbm.FDESC as text, vrbm.FPKID as value from Vie_RS_BorderMode vrbm
     </select>
 
+    <select id="getPriceByPriceIdAndOrderDate" resultType="String">
+        SELECT A.FUnitPrice
+        FROM (select FpriceID,FUnitPrice,FPriceEffDate,ROW_NUMBER () OVER(PARTITION BY FpriceID ORDER BY FPriceEffDate
+        DESC) RN
+        FROM Vie_RS_Product
+        WHERE FpriceID=#{priceId} AND CONVERT(varchar(10),#{orderDate},120) >= FPriceEffDate and
+        FPriceExpDate >= CONVERT(varchar(10),#{orderDate},120)
+        ) A
+        WHERE A.RN =1;
+    </select>
+
 </mapper>

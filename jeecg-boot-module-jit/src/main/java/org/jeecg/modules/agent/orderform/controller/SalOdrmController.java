@@ -1,11 +1,15 @@
 package org.jeecg.modules.agent.orderform.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.shiro.SecurityUtils;
 import org.jeecg.common.api.vo.Result;
 import org.jeecg.common.aspect.annotation.AutoLog;
@@ -29,14 +33,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @Description: 订单表
@@ -323,5 +325,19 @@ public class SalOdrmController {
     public Result<?> getAgentByLoginUser() {
         LoginUser sysUser = (LoginUser)SecurityUtils.getSubject().getPrincipal();
         return Result.OK(salOdrmService.getAgentByLoginUser(sysUser.getUsername()));
+    }
+
+    /**
+     * @description 获取单价
+     * @author Ning
+     * @date 2021/10/14
+     * @param priceId
+     * @param orderDate
+     * @return org.jeecg.common.api.vo.Result<?>
+     */
+    @GetMapping(value = "/getPriceByPriceIdAndOrderDate")
+    public Result<?> getPriceByPriceIdAndOrderDate(@RequestParam(name = "priceId", required = true) String priceId,
+        @RequestParam(name = "orderDate", required = true) String orderDate) {
+        return Result.OK(salOdrdService.getPriceByPriceIdAndOrderDate(priceId, orderDate));
     }
 }
