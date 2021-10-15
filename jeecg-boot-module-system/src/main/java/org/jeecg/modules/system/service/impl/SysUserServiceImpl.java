@@ -68,8 +68,21 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public Result<?> resetPassword(String username, String oldpassword, String newpassword, String confirmpassword) {
         SysUser user = userMapper.getUserByName(username);
         String passwordEncode = PasswordUtil.encrypt(username, oldpassword, user.getSalt());
-        if (!user.getPassword().equals(passwordEncode)) {
-            return Result.error("旧密码输入错误!");
+        String salt = null;
+        Boolean isDefaultPwdFlag = false; //默认密码标识
+        
+        //当密码盐为默认值，用明文密码比较，前台让用户修改密码
+        if ("1234abcd".equals(user.getSalt())) {
+        	if (!user.getPassword().equals(oldpassword)) {
+                return Result.error("旧密码输入错误!");
+            }
+        	isDefaultPwdFlag=true;
+        	salt=oConvertUtils.randomGen(8);
+        }else {
+	        if (!user.getPassword().equals(passwordEncode)) {
+	            return Result.error("旧密码输入错误!");
+	        }
+	        salt=user.getSalt();
         }
         if (oConvertUtils.isEmpty(newpassword)) {
             return Result.error("新密码不允许为空!");
@@ -77,8 +90,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (!newpassword.equals(confirmpassword)) {
             return Result.error("两次输入密码不一致!");
         }
-        String password = PasswordUtil.encrypt(username, newpassword, user.getSalt());
-        this.userMapper.update(new SysUser().setPassword(password), new LambdaQueryWrapper<SysUser>().eq(SysUser::getId, user.getId()));
+        String password = PasswordUtil.encrypt(username, newpassword, salt);
+        SysUser sysUser = new SysUser();
+        sysUser.setPassword(password);        
+        if (isDefaultPwdFlag) {
+        	//默认密码登录需更新密码盐
+        	sysUser.setSalt(salt);
+        }
+        //this.userMapper.update(new SysUser().setPassword(password), new LambdaQueryWrapper<SysUser>().eq(SysUser::getId, user.getId()));
+        this.userMapper.update(sysUser, new LambdaQueryWrapper<SysUser>().eq(SysUser::getId, user.getId()));
         return Result.ok("密码重置成功!");
     }
 

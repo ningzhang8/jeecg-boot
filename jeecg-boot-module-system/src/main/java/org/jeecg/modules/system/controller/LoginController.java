@@ -67,6 +67,7 @@ public class LoginController {
 		Result<JSONObject> result = new Result<JSONObject>();
 		String username = sysLoginModel.getUsername();
 		String password = sysLoginModel.getPassword();
+		Boolean isDefaultPwdFlag = false; //默认密码标识
 		//update-begin--Author:scott  Date:20190805 for：暂时注释掉密码加密逻辑，有点问题
 		//前端密码加密，后端进行密码解密
 		//password = AesEncryptUtil.desEncrypt(sysLoginModel.getPassword().replaceAll("%2B", "\\+")).trim();//密码解密
@@ -100,7 +101,14 @@ public class LoginController {
 		}
 		
 		//2. 校验用户名或密码是否正确
-		String userpassword = PasswordUtil.encrypt(username, password, sysUser.getSalt());
+		String userpassword=null;
+		//当密码盐为默认值，用明文密码比较，前台让用户修改密码
+		if ("1234abcd".equals(sysUser.getSalt())) {
+			isDefaultPwdFlag=true;
+			userpassword=password;
+		}else {
+			userpassword = PasswordUtil.encrypt(username, password, sysUser.getSalt());
+		} 
 		String syspassword = sysUser.getPassword();
 		if (!syspassword.equals(userpassword)) {
 			result.error500("用户名或密码错误");
@@ -115,6 +123,9 @@ public class LoginController {
 		LoginUser loginUser = new LoginUser();
 		BeanUtils.copyProperties(sysUser, loginUser);
 		baseCommonService.addLog("用户名: " + username + ",登录成功！", CommonConstant.LOG_TYPE_1, null,loginUser);
+		if (isDefaultPwdFlag) {
+			result.success("登录成功,使用初始密码,需立即更改密码[isDefaultPwdFlag=true]");
+		}
         //update-end--Author:wangshuai  Date:20200714  for：登录日志没有记录人员
 		return result;
 	}
