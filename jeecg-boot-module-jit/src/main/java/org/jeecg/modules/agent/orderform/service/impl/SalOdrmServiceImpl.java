@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.shiro.SecurityUtils;
+import org.jeecg.common.system.vo.LoginUser;
 import org.jeecg.modules.agent.orderform.entity.SalOdrd;
 import org.jeecg.modules.agent.orderform.entity.SalOdrm;
 import org.jeecg.modules.agent.orderform.mapper.SalOdrdMapper;
@@ -36,13 +38,17 @@ public class SalOdrmServiceImpl extends ServiceImpl<SalOdrmMapper, SalOdrm> impl
     @Override
     @Transactional
     public void saveMain(SalOdrm salOdrm, List<SalOdrd> salOdrdList) {
+        LoginUser sysUser = (LoginUser) SecurityUtils.getSubject().getPrincipal();
+        String userId = sysUser.getId();
         salOdrm.setFrecstat("0");
         salOdrm.setTxType("0");
+        salOdrm.setCreateBy(userId);
         salOdrmMapper.insert(salOdrm);
         if (salOdrdList != null && salOdrdList.size() > 0) {
             for (SalOdrd entity : salOdrdList) {
                 // 外键设置
                 entity.setFkid(salOdrm.getId());
+                entity.setCreateBy(userId);
                 salOdrdMapper.insert(entity);
             }
         }
